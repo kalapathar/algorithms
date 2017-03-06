@@ -2,35 +2,34 @@
 using namespace std;
 #include<vector>
 
-int* sort(int* m, int length){
-	int tmp;
-	for(int i=0;i<length-1;++i){
-		for(int j=i+1;j<length;++j)
-			if(m[i]>m[j]){
-				tmp=m[i];
-				m[i]=m[j];
-				m[j]=tmp;
-			}
-	}
-	return m;
-}
+
+#include<iostream>
+using namespace std;
+#include<string>
+#include<vector>
 
 
-const char* binarysearch(vector<string> f, const char* search, int left, int right){
+
+void binarysearch(vector<string>f, const char* search, int left, int right){
 	int middle=(left+right)/2;
-	if(search<f[left] or search>f[right]){
-		return "Not found";
+	if(search<f[left] or search >f[right]){
+		cout<<"Not found"<<endl;
+		exit(0);
 	}
 	if(f[middle]==search){
-		return "Found";
-	}else if(f[middle]>search){
-		binarysearch(f,search, left,middle-1);
-	}else{
-		binarysearch(f,search, middle+1, right);
+		cout<<"Found"<<endl;
+	}else if(f[middle]<search){
+		binarysearch(f, search, middle+1, right);
+	}else {
+		binarysearch(f, search, left, middle-1);
 	}
-	
 }
-	
+
+
+
+
+
+
 int main(){
 	vector<string> my_vector;
 	//int* p;
@@ -39,11 +38,7 @@ int main(){
 		my_vector.push_back(list[i]);
 		
 	}
-	const char* boolfind;
-	boolfind=binarysearch(my_vector, "apple", 0, 11);
-	//cout<<"Index of x is::"<<x<<endl;
-    cout<<"Boolfind"<<boolfind[1]<<endl;
-	
+	binarysearch(my_vector, "banana", 0, my_vector.size()-1);
+
 
 }
-
