@@ -61,21 +61,27 @@ void postvisit(int vertex) {
 map<int,bool> visited;
 
 vector<int> dfs(vector<vector<int>> Graph, int svertex){
-	visited[svertex]=true;
+  
+    for(int i=0;i<Graph.size();i++){
+    visited[i]=false;
+  }
+
+
 	vector<int> path;stack<int> s;
-	path.push_back(svertex);
+
 	s.push(svertex);
 	previsit(svertex);
 	while (!s.empty()){
 		int vertex=s.top();
-		s.pop();
+    s.pop();
+    visited[vertex]=true;
+    path.push_back(vertex);
+    for (int i=0;i<Graph[vertex].size();++i){
+      if(visited[Graph[vertex][i]]!=true)
+    s.push(Graph[vertex][i]);
+  }
 
-		if (visited[vertex]!=true)
-		path.push_back(vertex);
-	for (int i=0;i<Graph[svertex].size();++i){
-		s.push(Graph[svertex][i]);
-	}
-	}
+}
 
 postvisit(svertex);
 return path;
@@ -97,16 +103,26 @@ int main(){
 
 	for (int i=2;i+1<vertexedge.size();i+=2){
     int v=vertexedge[i];
+    
     int e=vertexedge[i+1];
+    
     Graph[v].push_back(e);
     Graph[e].push_back(v); //In case the graph is directed, works in both cases.
 }
 
+   for(int i=0;i<vertices;++i){
+    for(int j=0;j<Graph[i].size();++j){
+      cout<<"e\t"<<i<<"\t"<<Graph[i][j]<<endl;
+    }
+    }
+
+vector<int> pathtaken;
+
+   	pathtaken=dfs(Graph,0);
+    cout<<"Path Followed:"<<endl; 
+    for (int i=0;i<pathtaken.size();i++){
+      cout<<pathtaken[i]<<endl;
+    }
 
 
-   	dfs(Graph,1);
-   	cout<<"(Previsit, Postvisit)"<<endl;
-   	for(int i=0;i<vertices;i++){
-   		cout<<i<<"\t"<<"("<<previsitlist[i]<<","<<postvisitlist[i]<<")"<<endl;
-   	}
 }
