@@ -67,27 +67,22 @@ vector<int> dfs(vector<vector<int>> Graph, int svertex){
 	s.push(svertex);
 	previsit(svertex);
 	while (!s.empty()){
-		int vertex=s.pop();
+		int vertex=s.top();
+		s.pop();
+
 		if (visited[vertex]!=true)
 		path.push_back(vertex);
-	}
 	for (int i=0;i<Graph[svertex].size();++i){
-		if(!visited[Graph[svertex][i]]) explore(Graph, Graph[svertex][i]);
+		s.push(Graph[svertex][i]);
 	}
+	}
+
 postvisit(svertex);
+return path;
 
 }
 
-void dfs(vector<vector<int>> Graph){
-	for(int i=0;i<Graph.size();i++){
-		visited[i]=false;
-	}
-	for(int i=0;i<Graph.size();i++){
-		if(!visited[i]){
-			explore(Graph, i);
-		}
-	}
-}
+
 
 
 int main(){
@@ -109,7 +104,7 @@ int main(){
 
 
 
-   	dfs(Graph);
+   	dfs(Graph,1);
    	cout<<"(Previsit, Postvisit)"<<endl;
    	for(int i=0;i<vertices;i++){
    		cout<<i<<"\t"<<"("<<previsitlist[i]<<","<<postvisitlist[i]<<")"<<endl;
