@@ -60,32 +60,40 @@ void postvisit(int vertex) {
 }
 map<int,bool> visited;
 
-vector<int> dfs(vector<vector<int>> Graph, int svertex){
-  
-    for(int i=0;i<Graph.size();i++){
+
+void explore(vector<vector<int>> Graph, int svertex){
+  visited[svertex]=true;
+  previsit(svertex);
+  stack<int> s;
+  s.push(svertex);
+  while(!s.empty()){
+    int vertex=s.top();
+    bool tracker=true;
+    for(int i=0;i<Graph[vertex].size();++i){
+      if(!visited[Graph[vertex][i]]){
+        previsit(Graph[vertex][i]);
+        visited[Graph[vertex][i]]=true;
+        s.push(Graph[vertex][i]);
+        tracker=false;
+      }
+    }
+    if (tracker){
+      s.pop();
+      postvisit(vertex);
+    }
+  }
+}
+
+void dfs(vector<vector<int>> Graph){
+for(int i=0;i<Graph.size();i++){
     visited[i]=false;
   }
 
-
-	vector<int> path;stack<int> s;
-
-	s.push(svertex);
-	previsit(svertex);
-	while (!s.empty()){
-		int vertex=s.top();
-    s.pop();
-    visited[vertex]=true;
-    path.push_back(vertex);
-    for (int i=0;i<Graph[vertex].size();++i){
-      if(visited[Graph[vertex][i]]!=true)
-    s.push(Graph[vertex][i]);
+  for (int vertex=0;vertex<Graph.size();++vertex){
+    if(!visited[vertex]){
+      explore(Graph, vertex);
+    }
   }
-
-}
-
-postvisit(svertex);
-return path;
-
 }
 
 
@@ -103,9 +111,7 @@ int main(){
 
 	for (int i=2;i+1<vertexedge.size();i+=2){
     int v=vertexedge[i];
-    
     int e=vertexedge[i+1];
-    
     Graph[v].push_back(e);
     Graph[e].push_back(v); //In case the graph is directed, works in both cases.
 }
@@ -115,14 +121,48 @@ int main(){
       cout<<"e\t"<<i<<"\t"<<Graph[i][j]<<endl;
     }
     }
-
-vector<int> pathtaken;
-
-   	pathtaken=dfs(Graph,0);
-    cout<<"Path Followed:"<<endl; 
-    for (int i=0;i<pathtaken.size();i++){
-      cout<<pathtaken[i]<<endl;
-    }
-
-
+dfs(Graph);
+cout<<"Vertex \t (Previsit, Postvisit)"<<endl;
+for(int i=0;i<vertices;++i){
+  cout<<i<<"\t"<<"("<<previsitlist[i]<<", "<<postvisitlist[i]<<")"<<endl;
 }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
