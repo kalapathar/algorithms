@@ -48,14 +48,14 @@ int Heap::delmin(){
 	int hatam=yovector[1];
 	int aantim=yovector[yovector.size()-1];
 	int yoindex=parent(yovector.size()-1);
-	//cout<<"Yoindex"<<yoindex<<endl;
+	
 
-	//cout<<"aantim"<<aantim<<endl;
+	
 	yovector.pop_back();
 	yovector[1]=aantim;
 	aantim=yovector[yovector.size()-1];
 
-	//cout<<"aantim"<<aantim<<endl;
+	
 	
 	for(int i=1;i<=yoindex;i=i*2){
 		if (parent(i)!=0){
@@ -83,7 +83,6 @@ void Heap::print(){
 
 int main(){
 	Heap h(10);
-	
 	h.insert(7);
 	h.insert(5);
 	h.insert(8);
@@ -91,9 +90,6 @@ int main(){
 	h.insert(100);
 	h.insert(3);
 	h.insert(-1);
-
-
-
 	h.print();
 	cout<<h.delmin()<<endl;
 	cout<<h.delmin()<<endl;
@@ -102,8 +98,5 @@ int main(){
 	cout<<h.delmin()<<endl;
 	cout<<h.delmin()<<endl;
 	cout<<h.delmin()<<endl;
-
 	h.print();
-
-
 }
