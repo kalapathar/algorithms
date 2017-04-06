@@ -16,6 +16,11 @@ public:
 	void insert(int value);
 	void print();
 	int delmin();
+	int leftchild(int l);
+	int rightchild(int r);
+	void minheap(int index);
+	int minchild(int pindex);
+	int minchildindex(int pindex);
 
 };
 
@@ -48,15 +53,11 @@ int Heap::delmin(){
 	int hatam=yovector[1];
 	int aantim=yovector[yovector.size()-1];
 	int yoindex=parent(yovector.size()-1);
-	
-
-	
 	yovector.pop_back();
 	yovector[1]=aantim;
-	aantim=yovector[yovector.size()-1];
 
-	
-	
+/*	
+	aantim=yovector[yovector.size()-1];
 	for(int i=1;i<=yoindex;i=i*2){
 		if (parent(i)!=0){
 			if(yovector[parent(i)]>yovector[i]){
@@ -68,11 +69,48 @@ int Heap::delmin(){
 		}
 
 	}
+	*/
+	minheap(1);
 
 return hatam;
 
 }
+void  Heap::minheap(int index ){
+	int left=leftchild(index);
+	int right=rightchild(index);
+	int least;
+	int size=yovector.size();
+	if (left<=size and yovector[left]<yovector[index]){
+		least=left;
+	}else {
+		least=index;
+	}
+	if (right<=size and yovector[right]<yovector[least]) least=right;
 
+	if (least!=index){
+		int temp=yovector[index];
+		yovector[index]=yovector[least];
+		yovector[least]=temp;
+		minheap(least);
+	}
+
+
+}
+
+int Heap::minchildindex(int pindex){
+	if (leftchild(pindex)>rightchild(pindex)) return leftchild(pindex);
+	return rightchild(pindex);
+}
+
+int Heap::leftchild(int lindex){
+	return 2*lindex;
+
+}
+
+int Heap::rightchild(int rindex){
+	return 2*rindex+1;
+
+}
 void Heap::print(){
 	for(int i=1;i<yovector.size();i++){
 		cout<<yovector[i]<<endl;
@@ -90,13 +128,9 @@ int main(){
 	h.insert(100);
 	h.insert(3);
 	h.insert(-1);
+	//h.print();
+	h.delmin();
 	h.print();
-	cout<<h.delmin()<<endl;
-	cout<<h.delmin()<<endl;
-	cout<<h.delmin()<<endl;
-	cout<<h.delmin()<<endl;
-	cout<<h.delmin()<<endl;
-	cout<<h.delmin()<<endl;
-	cout<<h.delmin()<<endl;
-	h.print();
+
+	
 }

@@ -42,7 +42,7 @@ struct Node {
 class Compare {
 public:
 	bool operator()(const Node &a, const Node &b) const {
-		return (a.state[3] < b.state[3]);
+		return (a.state[3] > b.state[3]);
 	}
 };
 
@@ -102,6 +102,7 @@ void conserve_water(Node src) {
 			}
 		}
 	}
+
 	
 
 	priority_queue <Node, vector <Node>, Compare> pq;
@@ -112,14 +113,32 @@ void conserve_water(Node src) {
 	for (int i=0; i < all_nodes.size(); ++i) {
 		dist[all_nodes[i]] = INF;
 	}
+
+
+	for(int i=0;i<all_nodes.size();i++){
+		if (all_nodes[i].state[3]==0 ){
+			dist[all_nodes[i]]=INF;
+		}
+		
+	}
+
 	pq.push(src);
 	
 	dist[src] = 0;
+	for(int i=0;i<all_nodes.size();i++){
+		if (all_nodes[i].state[2]==4 && all_nodes[i].state[3]==4){
+			
+			//cout<<"Distance of "<<all_nodes[i]<<"is "<<dist[all_nodes[i]]<<endl;
+
+		}
+		
+	}
+	
 
 		
 	while (!pq.empty()) {
 		Node current_node = pq.top();
-		cout << current_node << endl;
+		//cout << current_node << endl;
 		pq.pop();
 
 		if (isGoal(current_node)) {
@@ -139,19 +158,27 @@ void conserve_water(Node src) {
 		}
 */		
 		vector <Node> nbr = current_node.neighbors();
+		cout<<"Current Node is "<<current_node<<endl;
+		cout<<"-----------------------------------------------------"<<endl;
 		for (int i=0; i < nbr.size(); ++i) {
 			Node neighbor = nbr[i];
+			
 			int new_distance = dist[current_node] + neighbor.state[3];
-			if (new_distance < dist[neighbor]) {
+			cout<<"New Distance of "<<neighbor<<"is "<<new_distance<<" "<<endl;
+			cout<<"    Dist[neighbor]=="<<dist[neighbor]<<endl;
+			if (new_distance <= dist[neighbor]) {
+
 				dist[neighbor] = new_distance;
-				cout<<"Distance of"<<neighbor<<"is "<<new_distance<<endl;
+				cout<<"        Distance of"<<neighbor<<"is "<<new_distance<<endl;
 				pq.push(neighbor);
 			}
-		}	
+		}
+		cout<<"----------------------------------------------------------"<<endl;
 	}
 
 
 }
+
 
 bool isGoal(const Node &n) {
 	return (n.state[1] == 2 || n.state[2] == 2);
