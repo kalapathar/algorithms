@@ -7,7 +7,7 @@
 #include<algorithm>
 
 using namespace std;
-typedef pair<int, int> ipair;
+typedef pair<int, int> mypair;
 #define INF 0x3f3f3f3f
 vector<int> visited;
 
@@ -92,25 +92,16 @@ public:
   int get_weight(int u, int v);
   vector<int> neighbors(int u);
   void dijkstra(int start);
-  pair<int, ipair> vertex_minweight(int u);
+  pair<int, int> index_minweight(int u);
   bool isvisited(int s);
   //void dijkstra1(int start);
   int minindex(vector<int>);
   void explore(int start);
-  void kruskal();
-  bool cycle(int u, int v);
-  pair<int,ipair> ultimate_min_pair(vector<pair<int,ipair>> v);
-  pair<int,ipair> min_weight(vector<int> v);
-  
-  pair<int, ipair> first_lowest();
-  bool allvisited();
-
-
 };
 
 void Graph::add_edges(int x, int y, int w){
   graph[x][y]=w;
-  graph[y][x]=w;
+  //graph[y][x]=w;
 }
 
 int Graph::get_weight(int u, int v){
@@ -137,31 +128,23 @@ void Graph::print(){
 }
 
 
-pair<int, ipair> Graph::vertex_minweight(int u){
-  
+pair<int, int> Graph::index_minweight(int u){
   pair<int, int>min;
   map<int, int> adjvertex=graph[u];
-  int vertex;int weight=INF;
-
-for(map<int, int>::iterator i=adjvertex.begin();i!=adjvertex.end();i++){
-    
-     
-    if(!isvisited(i->first)){     
-     
+  int vertex;int weight;
+  for(map<int, int>::iterator i=adjvertex.begin();i!=adjvertex.end();i++){
+    weight=i->second;vertex=i->first;
+    if(!isvisited(i->first)){
     
     if (i->second<weight){
       weight=i->second;
       vertex=i->first;
-     
-      
     }
 
     }
-    
 
   }
-  min=make_pair(vertex, weight);
-  return make_pair(u, min);
+  return make_pair(vertex, weight);
 }
 
 
@@ -186,90 +169,10 @@ int Graph::minindex(vector<int> v){
   return temp;
 }
 
-pair<int, pair<int, int>> Graph::ultimate_min_pair(vector<pair<int, pair<int,int>>> v){
-  pair<int, ipair> lowest=v[0];
-  for(int i=0;i<v.size();i++){
-    if(v[i].second.second<lowest.second.second) lowest=v[i];
-  }
-  return lowest;
-}
 
-
-bool Graph::cycle(int u, int v){
-  if(isvisited(u) && isvisited(v)) return true;
-  return false;
-}
-
-pair<int,ipair> Graph::min_weight(vector<int> v){
-  pair<int,ipair> min;
-  vector<pair<int, ipair>> allpairs;
-  for(int i=0;i<v.size();i++){
-      pair<int,ipair> minpair_vertex=vertex_minweight(v[i]);
-    allpairs.push_back(minpair_vertex);
-  }
-   min=ultimate_min_pair(allpairs);
-  return min;
-}
-
-
-
-
-pair<int, ipair> Graph::first_lowest(){
-  pair<int, ipair> minpair;
-  vector<pair<int, ipair>> allpairs;
-    for(int i=0;i<vertex(graph).size();i++){
-    vector<int> allvertex=vertex(graph);
-    
-    pair<int, ipair> minpair1=vertex_minweight(allvertex[i]);
-    
-    allpairs.push_back(minpair1);
-  }
-  minpair=ultimate_min_pair(allpairs);
-
-  return minpair;
-}
-
-
-
-void Graph::kruskal(){
-  vector<int> k_edges;
-  vector<ipair> v_edges; 
-  pair<int, ipair> min=first_lowest();
-  int mincost=0;
-  while(!allvisited()){
-  mincost=mincost+min.second.second;
-  k_edges.push_back(min.first);k_edges.push_back(min.second.first);
-  v_edges.push_back(make_pair(min.first, min.second.first));
-  if(!isvisited(min.first)) visited.push_back(min.first);
-  if(!isvisited(min.second.first))visited.push_back(min.second.first);
-  min=min_weight(k_edges);
-
-}
-
-cout<<"------------------------------------"<<endl;
-cout<<"Edges Visit Sequence"<<endl;
-
-for(int i=0;i<v_edges.size();i++){
-  cout<<"Visited:: "<<v_edges[i].first<<v_edges[i].second<<endl;
-}
-cout<<"------------------------------------"<<endl;
-cout<<"Minimum cost is: "<<mincost<<endl;
-
-}
-
-
-
-bool Graph::allvisited(){
-  vector<int> allvertex=vertex(graph);
-  for(int i=0;i<allvertex.size();i++){
-        if(!isvisited(allvertex[i])) return false;
-  }
-  return true;
-
-}
 
 void Graph::dijkstra(int start){
-  priority_queue<ipair, vector<ipair>, greater<ipair>> pq;
+  priority_queue<mypair, vector<mypair>, greater<mypair>> pq;
   vector<int> dist(graph.size(), INF);
   pq.push(make_pair(start,0));
   dist[start]=0;
@@ -329,7 +232,7 @@ void Graph::explore(int start){
 
 int main(){
 
-	ifstream f("file3.txt");
+	ifstream f("file2.txt");
 	vector<int> vertexedge;
 	vertexedge=readfile(f);
 	f.close();
@@ -349,10 +252,10 @@ for (int i=2;i+2<vertexedge.size();i+=3){
 
 g.print();
 //g.dijkstra(0);
-//g.explore(0);
-g.kruskal();
+g.explore(0);
 
 }
+
 
 
 
