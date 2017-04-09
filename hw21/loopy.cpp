@@ -82,7 +82,6 @@ vector<int> weight(map<int, int> g){
 }
 
 
-
 class Graph{
 private:
   map<int, map<int, int>> graph;
@@ -91,17 +90,8 @@ public:
   void print();
   int get_weight(int u, int v);
   vector<int> neighbors(int u);
-  void dijkstra(int start);
-  pair<int, ipair> vertex_minweight(int u);
   bool isvisited(int s);
-  int minindex(vector<int>);
   void explore(int start);
-  void kruskal();
-  bool cycle(int u, int v);
-  pair<int,ipair> ultimate_min_pair(vector<pair<int,ipair>> v);
-  pair<int,ipair> min_weight(vector<int> v);
-  pair<int, ipair> min_weight();
-  bool allvisited();
 };
 
 void Graph::add_edges(int x, int y, int w){
@@ -133,34 +123,6 @@ void Graph::print(){
 }
 
 
-pair<int, ipair> Graph::vertex_minweight(int u){
-  
-  pair<int, int>min;
-  map<int, int> adjvertex=graph[u];
-  int vertex;int weight=INF;
-
-for(map<int, int>::iterator i=adjvertex.begin();i!=adjvertex.end();i++){
-    
-     
-    if(!isvisited(i->first)){     
-     
-    
-    if (i->second<weight){
-      weight=i->second;
-      vertex=i->first;
-     
-      
-    }
-
-    }
-    
-
-  }
-  min=make_pair(vertex, weight);
-  return make_pair(u, min);
-}
-
-
 bool Graph::isvisited(int s){
   for (int i=0;i<visited.size();i++){
     if (s==visited[i]) return true;
@@ -169,122 +131,16 @@ bool Graph::isvisited(int s){
 }
 
 
-int Graph::minindex(vector<int> v){
-  int index=0;int temp=v[0];
-  for (int i=0;i<v.size();i++){
-    if(!isvisited(v[i])){
-      if(v[i]<temp) {
-      temp=v[i];
-      index=i;
-    }
-}
-}
-  return temp;
-}
-
-pair<int, ipair> Graph::ultimate_min_pair(vector<pair<int, ipair>> v){
-  pair<int, ipair> lowest=v[0];
-  for(int i=0;i<v.size();i++){
-    if(v[i].second.second<lowest.second.second) lowest=v[i];
-  }
-  return lowest;
-}
-
-
-bool Graph::cycle(int u, int v){
-  if(isvisited(u) && isvisited(v)) return true;
-  return false;
-}
-
-pair<int,ipair> Graph::min_weight(vector<int> v){
-  pair<int,ipair> min;
-  vector<pair<int, ipair>> allpairs;
-  for(int i=0;i<v.size();i++){
-      pair<int,ipair> minpair=vertex_minweight(v[i]);
-    allpairs.push_back(minpair);
-  }
-   min=ultimate_min_pair(allpairs);
-  return min;
-}
 
 
 
 
-pair<int, ipair> Graph::min_weight(){
-  pair<int, ipair> min;
-  vector<pair<int, ipair>> allpairs;
-    for(int i=0;i<vertex(graph).size();i++){
-    vector<int> allvertex=vertex(graph);
-    pair<int, ipair> minpair=vertex_minweight(allvertex[i]);
-    allpairs.push_back(minpair);
-  }
-  min=ultimate_min_pair(allpairs);
-  return min;
-}
 
 
 
-void Graph::kruskal(){
-  vector<int> k_edges;
-  vector<ipair> v_edges; 
-  pair<int, ipair> min=min_weight();
-  int mincost=0;
-  while(!allvisited()){
-  mincost=mincost+min.second.second;
-  k_edges.push_back(min.first);k_edges.push_back(min.second.first);
-  v_edges.push_back(make_pair(min.first, min.second.first));
-  if(!isvisited(min.first)) visited.push_back(min.first);
-  if(!isvisited(min.second.first))visited.push_back(min.second.first);
-  min=min_weight(k_edges);
-
-}
-
-cout<<"------------------------------------"<<endl;
-cout<<"Edges Visit Sequence"<<endl;
-
-for(int i=0;i<v_edges.size();i++){
-  cout<<"Visited:: "<<v_edges[i].first<<v_edges[i].second<<endl;
-}
-cout<<"------------------------------------"<<endl;
-cout<<"Minimum cost is: "<<mincost<<endl;
-
-}
 
 
 
-bool Graph::allvisited(){
-  vector<int> allvertex=vertex(graph);
-  for(int i=0;i<allvertex.size();i++){
-        if(!isvisited(allvertex[i])) return false;
-  }
-  return true;
-
-}
-
-void Graph::dijkstra(int start){
-  priority_queue<ipair, vector<ipair>, greater<ipair>> pq;
-  vector<int> dist(graph.size(), INF);
-  pq.push(make_pair(start,0));
-  dist[start]=0;
-  while(!pq.empty()){
-    int u=pq.top().first;
-    pq.pop();
-    map<int,int>::iterator i;
-    for(i=graph[u].begin();i!=graph[u].end();i++){
-      int v=i->first;
-      int weight=i->second;
-      if(dist[v]>dist[u]+weight){
-        dist[v]=dist[u]+weight;
-        pq.push(make_pair(v,dist[v]));
-      }
-    }
-
-
-  }
-  for(int i=0;i<graph.size();i++){
-    cout<<i<<"----------------"<<dist[i]<<endl;
-  }
-}
 
 ostream &operator<<(ostream &os,stack<int> stack ){
   while(!stack.empty()){
@@ -303,6 +159,7 @@ void Graph::explore(int start){
   stack<int> s;
   s.push(start);
   int pushed_num=0;
+  int pval=0;
   
   int totalcycles=0;
 vector<int> acycle;
@@ -317,8 +174,8 @@ vector<int> acycle;
     for(int i=0;i<nbrs.size();i++){
       if(!isvisited(nbrs[i])) {
         visited.push_back(nbrs[i]);
-        cout<<"Value about to pushed is::"<<nbrs[i]<<endl;
-        pushed_num++;
+       
+        pushed_num++;if(pushed_num>1) pval=ontop;
         s.push(nbrs[i]);
         
       }else{
@@ -327,10 +184,13 @@ vector<int> acycle;
         
         acycle.push_back(nbrs[i]);
         cycles.push_back(acycle);
+        acycle.pop_back();
+        for(int i=acycle.size()-1;acycle[i]!=pval;i--)
+        acycle.pop_back();
         //cycles.push_back(ontop);
       }
     }
-    for(int i=0;i<acycle.size();i++) cout<<"values in acycle"<<acycle[i];
+    
     if(pushed_num>1){
       vector<int> cycle2;
       for(int i=0;i<acycle.size();i++){
@@ -339,10 +199,15 @@ vector<int> acycle;
     }
   }
   cout<<"Total Cycles: "<<totalcycles<<endl;
-
   for(int i=0;i<cycles.size();i++){
-    cout<<"Size of cycle"<<cycles[i].size()<<endl;
+    cout<<"A cycle"<<endl;
+    for(int j=0;j<cycles[i].size();j++){
+      cout<<cycles[i][j];
+
+    }
+    
   }
+
 
 
 }
@@ -350,7 +215,7 @@ vector<int> acycle;
 
 int main(){
 
-	ifstream f("file5.txt");
+	ifstream f("file6.txt");
 	vector<int> vertexedge;
 	vertexedge=readfile(f);
 	f.close();
@@ -369,9 +234,9 @@ for (int i=2;i+2<vertexedge.size();i+=3){
 
 
 g.print();
-//g.dijkstra(0);
+
 g.explore(0);
-//g.kruskal();
+
 
 }
 
