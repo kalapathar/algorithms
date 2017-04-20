@@ -26,10 +26,12 @@ int main(){
 	}
 
 	for(int i=1;i<=breadth;i++){
+		cout<<"---------------------------------------------------"<<endl;
 		for( int j=1;j<=length;j++){
 			dist[i][j]=min(min(dist[i-1][j]+1, dist[i][j-1]+1), dist[i-1][j-1]+equal(i,j));
+			cout<<dist[i][j]<<endl;
 		}
-		
+		cout<<"----------------------------------------------------"<<endl;
 	}
 
 	cout<<"The edit distance for "<<m<<" and "<<n<<" is "<<dist[breadth][length]<<endl;
