@@ -4,7 +4,7 @@ Implemented various algorithms in C++. Algorithms included:
 3. Kruskal
 4. Dijkstra
 5. All sorting Algorithms: Bubblesort, mergesort, heapsort
-And several implementations of linkedlists to solve programming questions
+6. And several implementations of linkedlists to solve programming questions
 
 Team projects Included:
 1. Huffman Coding
